@@ -14,9 +14,7 @@ from . import forms
 from . import passwords
 from . import settings
 from . import tokens
-from . import translations
 from . import views
-from .translations import get_translations
 
 # Enable the following: from flask.ext.user import current_user
 from flask_login import current_user
@@ -125,17 +123,6 @@ class UserManager(object):
         # Make sure the settings are valid -- raise ConfigurationError if not
         settings.check_settings(self)
 
-        # Initialize Translations -- Only if Flask-Babel has been installed
-        if hasattr(app.jinja_env, 'install_gettext_callables'):
-            app.jinja_env.install_gettext_callables(
-                    lambda x: get_translations().ugettext(x),
-                    lambda s, p, n: get_translations().ungettext(s, p, n),
-                    newstyle=True)
-        else:
-            app.jinja_env.add_extension('jinja2.ext.i18n')
-            app.jinja_env.install_null_translations()
-
-
         # Create password_crypt_context if needed
         if not self.password_crypt_context:
             self.password_crypt_context = CryptContext(
@@ -157,12 +144,7 @@ class UserManager(object):
         # Add context processor
         app.context_processor(_flask_user_context_processor)
 
-        # Prepare for translations
-        _ = translations.gettext
-
-
     def setup_login_manager(self, app):
-
         # Flask-Login calls this function to retrieve a User record by user ID.
         # Note: user_id is a UNICODE string returned by UserMixin.get_id().
         # See https://flask-login.readthedocs.org/en/latest/#how-it-works
@@ -183,7 +165,6 @@ class UserManager(object):
 
         self.login_manager.login_view = 'user.login'
         self.login_manager.init_app(app)
-
 
     def add_url_routes(self, app):
         """ Add URL Routes"""

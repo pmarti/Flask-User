@@ -17,20 +17,6 @@ def coverage():
     local('py.test --cov flask_user --cov-report term-missing --cov-config flask_user/tests/.coveragerc flask_user/tests/')
 
 @task
-def babel():
-    local('pybabel extract -F flask_user/translations/babel.cfg -c NOTE -o flask_user/translations/flask_user.pot flask_user flask_user')
-    local('pybabel update -i flask_user/translations/flask_user.pot --domain=flask_user --output-dir flask_user/translations -l en')
-    local('pybabel update -i flask_user/translations/flask_user.pot --domain=flask_user --output-dir flask_user/translations -l nl')
-    local('pybabel compile -f --domain=flask_user --directory flask_user/translations')
-
-@task
-def babel_init():
-    local('pybabel extract -F flask_user/translations/babel.cfg -c NOTE -o flask_user/translations/flask_user.pot flask_user flask_user')
-    local('pybabel init -i flask_user/translations/flask_user.pot --domain=flask_user --output-dir flask_user/translations -l en')
-    local('pybabel init -i flask_user/translations/flask_user.pot --domain=flask_user --output-dir flask_user/translations -l nl')
-    local('pybabel compile -f --domain=flask_user --directory flask_user/translations')
-
-@task
 def docs():
     local('cp example_apps/*_app.py docs/source/includes/.')
     local('sphinx-build -b html docs/source ../builds/flask_user/docs')

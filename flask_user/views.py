@@ -6,6 +6,7 @@
 
 from datetime import datetime
 from flask import current_app, flash, redirect, render_template, request, url_for
+from flask.ext.babel import gettext as _
 from flask_login import current_user, login_user, logout_user
 try: # Handle Python 2.x and Python 3.x
     from urllib.parse import quote      # Python 3.x
@@ -14,7 +15,6 @@ except ImportError:
 from .decorators import confirm_email_required, login_required
 from . import emails
 from . import signals
-from .translations import gettext as _
 
 def confirm_email(token):
     """ Verify email confirmation token and activate the user account."""
